@@ -9,6 +9,14 @@ CADA SCRIPT DEBE ESTAR CONTENIDO DENTRO DE LA SUBCARPETA 'proceso' EN LA MISMA C
   dir <- dirname(rstudioapi::getSourceEditorContext()$path)
   setwd(dir)
 
+
+#### 0) VARIABLES DE CONTROL -----------------------------------------  
+"Este paso define las variables de control de los archivos a descargar"
+  
+  census_survey <- "acs1" #Encuesta a utilizar
+  year <- 2019 #Periodo de datos a consultar
+  
+  
   
 #### 1) OBTENCION DE DATA DE US STATES -----------------------------------------
 
@@ -72,20 +80,13 @@ base de datos MySQL remota ubicada en AWS.
 
 
 
-#LOS SIGUIENTES SCRIPTS CUMPLEN LA UNICA FUNCION DE LA VISUALIZACION DEL MAPA  
+#EL SIGUIENTE SCRIPTS CUMPLEN LA UNICA FUNCION DE LA VISUALIZACION DEL MAPA  
   
-#### 6) ARCHIVO RDATA -----------------------------------------
-  
-  "Este paso genera el archivo necesario para la ejecucion del dashboard interactivo
-"
-  
-  source("./proceso/6_app_data.R")
-  
-#### 8) VISUALIZACION DEL MAPA -----------------------------------------
+#### 6) VISUALIZACION DEL MAPA -----------------------------------------
 
 "Este paso ejecuta un dashboard interactivo para la visualizacion de la informacion sobre un mapa
 "
 
   source("./map_app/app.R")
-
+  runApp(shinyApp(ui,server))
 
