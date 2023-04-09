@@ -44,7 +44,11 @@ for(i in 1:length(objects_list)){
 }
 
 #Ejecucion del query aggregate_data.sql (Este crea la tabla aggregate_data que contiene la informacion consolidada del resto de las tablas)
-query_exec <- dbExecute(con, statement = read_file('./sql_queries/aggregate_data.sql'))
+aggregate_data <- dbGetQuery(con, statement = read_file('./sql_queries/aggregate_data.sql'))
+dbWriteTable(conn = con,
+             name = "aggregate_data",
+             value = aggregate_data,
+             overwrite = TRUE)
 
 
 #Desconexion a la BD
