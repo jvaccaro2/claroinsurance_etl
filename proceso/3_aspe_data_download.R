@@ -3,15 +3,26 @@
 library(readxl)
 library(tidyr)
 library(dplyr)
+library(RCurl)
+
+#Validacion de variables de control
+
+if(!exists("year")) year <- 2021
+
 
 #### OBTENCION DE DATA ----------------------------------------------------------------------
 
 #Descarga archivo en un archivo temporal
 temp <- tempfile()
-url <- "https://aspe.hhs.gov/sites/default/files/migrated_legacy_files//200111/aspe-uninsured-estimates-by-state.xlsx"
-download.file(url,temp, mode="wb")
+url <- paste0("https://aspe.hhs.gov/sites/default/files/documents/b9a5a69a7e4b8c081e9122383fc07bea/uninsured-estimates-state-eligibility-",year,".xlsx")
+url2 <- paste0("https://aspe.hhs.gov/sites/default/files/documents/51d2cc81e2516c11e35d4773b839605b/state-level-",year,".xlsx")
+
+if(url.exists(url)) download.file(url,temp, mode="wb")
+if(url.exists(url2)) download.file(url2,temp, mode="wb")
+if(!url.exists(url) & !url.exists(url2)) stop('No se encuentra archivo para el year seleccionado')
 
 data <-  read_excel(temp,sheet = "All Uninsured (#)")
+
 
 #Transformacion de data
 data <- select(data,c("State Name",colnames(data[grepl("Age ",colnames(data))])))
