@@ -1,4 +1,4 @@
-library(RMySQL)
+library(RMariaDB)
 library(DBI)
 library(readr)
 library(odbc)
@@ -11,12 +11,19 @@ database <- "claroinsuranceetl"
 port <- 3306
 
 #Conexion usando RMySQL (Esta conexion usa la version MySQL C API instalada en sistema)
-con <- RMySQL::dbConnect(RMySQL::MySQL(),
+con <- RMySQL::dbConnect(RMariaDB::MariaDB(),
                  host = host,
                  user = user,
                  password = password,
                  dbname = database,
                  port = port)
+
+if(!exists("states_data")) stop('No se encuentra el archivo states_data (generado en el paso 1) para ser cargado a la BD')
+if(!exists("states_ids")) stop('No se encuentra el archivo states_ids (generado en el paso 1) para ser cargado a la BD')
+if(!exists("census_data")) stop('No se encuentra el archivo census_data (generado en el paso 2) para ser cargado a la BD')
+if(!exists("unins_data")) stop('No se encuentra el archivo unins_data (generado en el paso 3) para ser cargado a la BD')
+if(!exists("covid_data")) stop('No se encuentra el archivo covid_data (generado en el paso 4) para ser cargado a la BD')
+
 
 
 #Lista de objetos creados en pasos anteriores
@@ -37,7 +44,10 @@ for(i in 1:length(objects_list)){
 }
 
 #Ejecucion del query aggregate_data.sql (Este crea la tabla aggregate_data que contiene la informacion consolidada del resto de las tablas)
-query_exec <- dbGetQuery(con, statement = read_file('./sql_queries/aggregate_data.sql'))
+query_exec <- dbExecute(con, statement = read_file('./sql_queries/aggregate_data.sql'))
 
+
+#Desconexion a la BD
+dbDisconnect(con)
 
 print('Paso 5: Completado exitosamente! . . . . . . . ')
