@@ -1,5 +1,10 @@
 library(bigrquery)
 
+#Validacion de variables de control
+
+if(!exists("bigquery_states")) bigquery_states <-  "bigquery-public-data.geo_us_boundaries.states"
+
+
 #ID del proyecto para el billing
 billing_id <- "covidtrackingdata"
 
@@ -8,9 +13,7 @@ bq_auth(email = "juanevaccaro@gmail.com")
 
 
 #Query a consultar
-sql <- "
-SELECT * FROM `bigquery-public-data.geo_us_boundaries.states`
-"
+sql <- paste0("SELECT * FROM `",bigquery_states,"`")
 
 #Extraccion de la data
 tb <- bq_project_query(billing_id, sql)
