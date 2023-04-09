@@ -1,7 +1,3 @@
-DROP TABLE IF EXISTS claroinsuranceetl.aggregate_data
-;
-CREATE TABLE claroinsuranceetl.aggregate_data
-
 WITH CTE_census AS (
 SELECT state
 	  ,SUM(population) population
