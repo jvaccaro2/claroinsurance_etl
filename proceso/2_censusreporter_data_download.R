@@ -5,9 +5,14 @@ library(readxl)
 library(tidyr)
 library(dplyr)
 
+#Validacion de variables de control
+
+if(!exists("census_survey")) census_survey <- "acs1"
+if(!exists("year")) year <- 2021
+
 
 #Variables del nombre del archivo (El nombre del archivo es necesario, dado que el zip descargado contiene una subcarpeta con el mismo titulo del nombre del archivo)
-name <- "acs2021_1yr_B01001_04000US24"
+name <- paste0("acs",year,"_",substr(census_survey,nchar(census_survey),nchar(census_survey)),"yr_B01001_04000US24")
 file <- paste0(name,'.xlsx')
 
 
@@ -15,7 +20,7 @@ file <- paste0(name,'.xlsx')
 
 #Descarga archivo en un archivo temporal
 temp_zip <- paste0(tempfile(),".zip")
-url <- "https://api.dokku.censusreporter.org/1.0/data/download/acs2021_1yr?table_ids=B01001&geo_ids=040|01000US&format=xlsx"
+url <- paste0("https://api.dokku.censusreporter.org/1.0/data/download/acs",year,"_",substr(census_survey,nchar(census_survey),nchar(census_survey)),"yr?table_ids=B01001&geo_ids=040|01000US&format=xlsx")
 download.file(url,temp_zip, mode="wb")
 
 
