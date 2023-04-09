@@ -6,6 +6,11 @@ library(tidyverse)
 library(stringr)
 library(dplyr)
 
+#Validacion de variables de control
+
+if(!exists("census_survey")) census_survey <- "acs1"
+if(!exists("year")) year <- 2021
+
 
 #### API KEY -------------------------------------------------------------------
 
@@ -22,7 +27,7 @@ substrRight <- function(x, n){
 #### OBTENCION DE DATA ----------------------------------------------------------------------
 
 #Lista de tablas disponibles
-vars <- load_variables(2021, "acs5", cache = TRUE)
+vars <- load_variables(year, "acs1", cache = TRUE)
 
 #Creacion de vector contentivo de todas las tablas del segmento B01001 (SEX BY AGE)
 variables_vec <- c(paste0("B01001_0",substrRight(paste0("0",1:49),2)))
@@ -45,9 +50,9 @@ vars0$age[vars0$age == ''] <- 'TOTAL'
 data <- get_acs(
   geography = "state",
   variables = variables_vec,
-  year = 2021,
+  year = year,
   output = "tidy",
-  survey = "acs1"
+  survey = census_survey
 )
 
 #Cruzar con vars0 para obtener nombres de categorias
